@@ -20,6 +20,10 @@ public class App {
 
             SimulacionService simulacion = new SimulacionService(em);
             simulacion.inicializarTemporada();
+            simulacion.jugarLiga();
+
+            // 3. Fichajes de fin de temporada
+            simulacion.gestionarFichajes();
 
             em.getTransaction().commit();
 

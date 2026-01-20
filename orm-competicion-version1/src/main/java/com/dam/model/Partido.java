@@ -13,22 +13,19 @@ public class Partido {
     @Column(nullable = false)
     private int jornada;
 
-    // Relación ManyToOne: Un partido tiene un equipo local
     @ManyToOne
     @JoinColumn(name = "home_team_id")
     private Equipo local;
 
-    // Relación ManyToOne: Un partido tiene un equipo visitante
     @ManyToOne
     @JoinColumn(name = "away_team_id")
     private Equipo visitante;
 
-    // Resultado (ej: "3-1" en mapas de AoE2)
-    private String resultado;
+    private String resultado; // Ej: "3-1"
 
     @ManyToOne
     @JoinColumn(name = "winner_id")
-    private Equipo ganador; // Puede ser null si es empate (aunque en AoE2 pro no suele haber empate)
+    private Equipo ganador;
 
     public Partido() {}
 
@@ -40,7 +37,10 @@ public class Partido {
         this.ganador = ganador;
     }
 
-    // Getters y Setters necesarios
-    public Equipo getGanador() { return ganador; }
+    // Getters necesarios para consultas
+    public Long getId() { return id; }
     public String getResultado() { return resultado; }
+    public Equipo getGanador() { return ganador; }
+    public Equipo getLocal() { return local; }
+    public Equipo getVisitante() { return visitante; }
 }
