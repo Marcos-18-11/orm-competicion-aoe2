@@ -23,6 +23,9 @@ public class Deportista {
     @Column(nullable = false, length = 50)
     private String nick;
 
+    @Column(columnDefinition = "double default 50000") // 50k salario base
+    private double salario;
+
     @Column(nullable = false)
     private String nacionalidad;
 
@@ -42,7 +45,7 @@ public class Deportista {
     }
 
     // Setter protected/package para usarlo en el helper del Equipo
-    void setEquipo(Equipo equipo) {
+    public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
     public Long getId() {
@@ -51,6 +54,9 @@ public class Deportista {
     public String getNacionalidad() {
         return nacionalidad;
     }
+
+    public double getSalario() { return salario; }
+    public void setSalario(double salario) { this.salario = salario; }
 
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;

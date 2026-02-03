@@ -1,13 +1,13 @@
 package com.dam.util;
 
-import com.dam.dao.jpa.EquipoDaoJpa;
-import com.dam.dao.jpa.PatrocinadorDaoJpa;
+import com.dam.dao.hibernate.EquipoDaoHibernate;
+import com.dam.dao.hibernate.PatrocinadorDaoHibernate;
 import com.dam.model.Deportista;
 import com.dam.model.Equipo;
 import com.dam.model.GamingHouse;
 import com.dam.model.Patrocinador;
 import com.github.javafaker.Faker;
-import jakarta.persistence.EntityManager;
+import org.hibernate.Session; // OJO: Import de Hibernate
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -17,7 +17,6 @@ import java.util.Random;
 
 public class CargaDatosIniciales {
 
-    // DATOS REALES DE AOE2 PARA DARLE REALISMO
     private static final String[] CLANES_REALES = {
             "GamerLegion", "Aftermath", "Team Suomi", "White Wolf Palace",
             "Heresy", "Amigos", "Barles & Cia", "Suicide Squad"
@@ -28,16 +27,18 @@ public class CargaDatosIniciales {
             "Capoch", "Villese", "Yo", "ACCM", "Mr_Yo", "Sitaux", "Ganji"
     };
 
-    public static void cargarDatos(EntityManager em) {
+    // CAMBIO: Ahora recibimos Session, no EntityManager
+    public static void cargarDatos(Session session) {
         Faker faker = new Faker();
         Random random = new Random();
 
-        EquipoDaoJpa equipoDao = new EquipoDaoJpa(em);
-        PatrocinadorDaoJpa patrocinadorDao = new PatrocinadorDaoJpa(em);
+        // CAMBIO: Instanciamos los DAOs de Hibernate
+        EquipoDaoHibernate equipoDao = new EquipoDaoHibernate(session);
+        PatrocinadorDaoHibernate patrocinadorDao = new PatrocinadorDaoHibernate(session);
 
-        System.out.println("--- INICIO CARGA DE DATOS (AoE2 Real Data) ---");
+        System.out.println("--- INICIO CARGA DE DATOS (AoE2 Real Data - Hibernate Nativo) ---");
 
-        // 1. PATROCINADORES (Mezclamos reales con generados)
+        // 1. PATROCINADORES
         List<Patrocinador> listaPatrocinadores = new ArrayList<>();
         String[] sponsorsReales = {"Red Bull", "Microsoft", "CaptureAge", "Twitch"};
 
@@ -46,7 +47,6 @@ public class CargaDatosIniciales {
             patrocinadorDao.guardar(p);
             listaPatrocinadores.add(p);
         }
-        // Rellenamos hasta 10 con Faker
         for (int i = 0; i < 6; i++) {
             Patrocinador p = new Patrocinador(faker.company().name());
             patrocinadorDao.guardar(p);
@@ -59,22 +59,20 @@ public class CargaDatosIniciales {
         for (String nombreClan : CLANES_REALES) {
             Equipo equipo = new Equipo(nombreClan, faker.country().name());
 
-            // A. Gaming House
+            // Gaming House
             GamingHouse gh = new GamingHouse(faker.address().city(), random.nextInt(10) + 5);
             equipo.asignarGamingHouse(gh);
 
-            // B. Patrocinadores (2 aleatorios)
+            // Patrocinadores
             equipo.addPatrocinador(listaPatrocinadores.get(random.nextInt(listaPatrocinadores.size())));
             equipo.addPatrocinador(listaPatrocinadores.get(random.nextInt(listaPatrocinadores.size())));
 
-            // C. Jugadores (Intentamos poner 1 PRO real y el resto randoms)
-            // Ponemos un jugador famoso
+            // Jugadores
             if (indexJugador < JUGADORES_PRO.length) {
                 String nombrePro = JUGADORES_PRO[indexJugador++];
                 crearJugador(equipo, nombrePro, faker);
             }
 
-            // Rellenamos el resto del equipo hasta tener 4 jugadores
             for (int j = 0; j < 3; j++) {
                 crearJugador(equipo, faker.esports().player(), faker);
             }

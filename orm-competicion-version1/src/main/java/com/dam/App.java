@@ -1,73 +1,88 @@
 package com.dam;
 
-import com.dam.config.JpaUtil;
+import com.dam.config.HibernateUtil;
 import com.dam.service.ConsultasCompeticion;
 import com.dam.service.SimulacionService;
-import jakarta.persistence.EntityManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class App {
 
+    // Declaramos el Logger de Log4j
+    private static final Logger logger = LogManager.getLogger(App.class);
+
     public static void main(String[] args) {
 
-        EntityManager em = null;
+        Session session = null;
+        Transaction tx = null;
 
         try {
-            // 1. Conexión
-            em = JpaUtil.getEntityManagerFactory().createEntityManager();
+            logger.info("=== INICIANDO SISTEMA DE GESTIÓN DEPORTIVA (V2) ===");
 
-            // 2. Simulación (Transacción 1)
-            em.getTransaction().begin();
+            // 1. Obtener Sesión de Hibernate (NATIVO)
+            session = HibernateUtil.getSessionFactory().openSession();
 
-            SimulacionService simulacion = new SimulacionService(em);
+            // 2. Iniciar Transacción
+            tx = session.beginTransaction();
+
+            // --- FASE 1: SIMULACIÓN ---
+            SimulacionService simulacion = new SimulacionService(session);
+
+            // PASO 1: CARGAR DATOS (¡Esto debe ir lo primero!)
+            logger.info(">> Cargando datos iniciales (Equipos, Jugadores, Sponsors)...");
             simulacion.inicializarTemporada();
+
+            // PASO 2: JUGAR LA LIGA
+            logger.info(">> Disputando la temporada 2026...");
             simulacion.jugarLiga();
 
-            // 3. Fichajes de fin de temporada
+            // PASO 3: GESTIÓN ECONÓMICA (NUEVO V2)
+            logger.info(">> Gestionando pagos de nóminas y premios...");
+            simulacion.gestionarEconomia();
+
+            // PASO 4: FICHAJES
+            logger.info(">> Abriendo mercado de fichajes de fin de temporada...");
             simulacion.gestionarFichajes();
 
-            em.getTransaction().commit();
+            // 3. Commit (Guardar todo en BD)
+            tx.commit();
+            logger.info("=== SIMULACIÓN FINALIZADA Y GUARDADA CON ÉXITO ===");
 
-            // 3. Consultas (No necesitan transacción obligatoria si son solo lecturas,
-            // pero el EM debe estar abierto)
-            System.out.println("\n\n*********************************************");
-            System.out.println("      EJECUTANDO BATERÍA DE CONSULTAS");
-            System.out.println("*********************************************");
+            // --- FASE 2: CONSULTAS ---
+            System.out.println("\n\n###########################################################");
+            System.out.println("      EJECUTANDO BATERÍA DE CONSULTAS (Hibernate Nativo)");
+            System.out.println("###########################################################");
 
-            ConsultasCompeticion consultas = new ConsultasCompeticion(em);
+            ConsultasCompeticion consultas = new ConsultasCompeticion(session);
 
+            // Bloque General
             consultas.consulta01_CaracteristicasCompeticion();
             consultas.consulta02_TodosLosEquipos();
             consultas.consulta03_DeportistasPorEquipo("GamerLegion");
-
-            // Intermedias (LAS QUE TE FALTABAN)
-            consultas.consulta04_PatrocinadoresDeEquipo("GamerLegion");
-            consultas.consulta05_ResumenEquipo("GamerLegion");
-            consultas.consulta06_EdadPromedio("GamerLegion");
-
-            // Agrupación y Ordenación
-            consultas.consulta07_Mayores23PorNacionalidad();
             consultas.consulta08_ClasificacionGeneral();
-            consultas.consulta09_Top3_Bottom3();
-
-            // Avanzadas (NUEVAS: NamedQuery, Totales y Criteria)
-            consultas.consulta10_NuevasIncorporaciones(); // NamedQuery
-            consultas.consulta11_FichajesRealizados();
-            consultas.consulta12_TotalDeportistas();
-            consultas.consulta13_PatrocinadoresComunes("GamerLegion", "Aftermath");
+            consultas.consulta10_NuevasIncorporaciones();
             consultas.consulta14_BusquedaCriterios();
 
+            // Bloque Económico (V2)
+            System.out.println("\n--- CONSULTAS ECONÓMICAS (V2) ---");
+            consultas.consulta15_EquipoMasRico();
+            consultas.consulta16_JugadorMejorPagado();
+            consultas.consulta17_AlertaQuiebra();
+
         } catch (Exception e) {
-            e.printStackTrace();
-            // Si falla algo y la transacción seguía abierta, deshacer cambios
-            if (em != null && em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
+            logger.error("CRITICAL ERROR: Se ha producido un fallo en la simulación.", e);
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+                logger.warn("Se ha realizado un Rollback de la transacción.");
             }
         } finally {
-            // Cerrar siempre
-            if (em != null) {
-                em.close();
+            if (session != null) {
+                session.close();
             }
-            JpaUtil.close();
+            HibernateUtil.shutdown();
+            logger.info("Conexión cerrada. Aplicación terminada.");
         }
     }
 }
