@@ -7,7 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
+/*
+* Clase principal
+*
+* @author Marcos Bautista 2 DAM Vespertino
+*@version 2.0
+* */
 public class App {
 
     // Declaramos el Logger de Log4j
@@ -21,43 +26,43 @@ public class App {
         try {
             logger.info("=== INICIANDO SISTEMA DE GESTIÓN DEPORTIVA (V2) ===");
 
-            // 1. Obtener Sesión de Hibernate (NATIVO)
+            //  Obtener Sesión de Hibernate
             session = HibernateUtil.getSessionFactory().openSession();
 
-            // 2. Iniciar Transacción
+            //  Iniciar Transacción
             tx = session.beginTransaction();
 
-            // --- FASE 1: SIMULACIÓN ---
+            // SIMULACIÓN ---
             SimulacionService simulacion = new SimulacionService(session);
 
-            // PASO 1: CARGAR DATOS (¡Esto debe ir lo primero!)
+            // CARGAR DATOS
             logger.info(">> Cargando datos iniciales (Equipos, Jugadores, Sponsors)...");
             simulacion.inicializarTemporada();
 
-            // PASO 2: JUGAR LA LIGA
+            // JUGAR LA LIGA
             logger.info(">> Disputando la temporada 2026...");
             simulacion.jugarLiga();
 
-            // PASO 3: GESTIÓN ECONÓMICA (NUEVO V2)
+            //  GESTIÓN ECONÓMICA (NUEVO V2)
             logger.info(">> Gestionando pagos de nóminas y premios...");
             simulacion.gestionarEconomia();
 
-            // PASO 4: FICHAJES
+            //  FICHAJES
             logger.info(">> Abriendo mercado de fichajes de fin de temporada...");
             simulacion.gestionarFichajes();
 
-            // 3. Commit (Guardar todo en BD)
+            //  Commit (Guardar todo en BD)
             tx.commit();
             logger.info("=== SIMULACIÓN FINALIZADA Y GUARDADA CON ÉXITO ===");
 
-            // --- FASE 2: CONSULTAS ---
+            //  CONSULTAS ---
             System.out.println("\n\n###########################################################");
             System.out.println("      EJECUTANDO BATERÍA DE CONSULTAS (Hibernate Nativo)");
             System.out.println("###########################################################");
 
             ConsultasCompeticion consultas = new ConsultasCompeticion(session);
 
-            // Bloque General
+            //  Generales
             consultas.consulta01_CaracteristicasCompeticion();
             consultas.consulta02_TodosLosEquipos();
             consultas.consulta03_DeportistasPorEquipo("GamerLegion");
@@ -65,7 +70,7 @@ public class App {
             consultas.consulta10_NuevasIncorporaciones();
             consultas.consulta14_BusquedaCriterios();
 
-            // Bloque Económico (V2)
+            // Económicas
             System.out.println("\n--- CONSULTAS ECONÓMICAS (V2) ---");
             consultas.consulta15_EquipoMasRico();
             consultas.consulta16_JugadorMejorPagado();

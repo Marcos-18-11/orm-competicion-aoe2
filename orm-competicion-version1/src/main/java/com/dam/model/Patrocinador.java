@@ -5,8 +5,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /***
- * Esta clase representa a los sponsors.
- * @author Tu Nombre
+ * Representa a un patrocinador, este podrá representar a avarios equipos
+ * @author Marcos
  */
 @Entity
 @Table(name = "sponsors")
@@ -20,9 +20,10 @@ public class Patrocinador {
     private String nombre;
 
     // MappedBy indica que la tabla intermedia la gestiona 'Equipo'
+    //Solo cargará equipos cuando se anecesario, relación many to many, por que como se explicó mas a riba
     @ManyToMany(mappedBy = "patrocinadores", fetch = FetchType.LAZY)
     private Set<Equipo> equipos = new LinkedHashSet<>();
-
+    // Constructor protegido → Hibernate lo usa para crear objetos
     protected Patrocinador() {}
 
     public Patrocinador(String nombre) {

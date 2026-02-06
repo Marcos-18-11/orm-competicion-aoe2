@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 /***
  * Relación 1 a 1 con Equipo (Sede de entrenamiento).
- * @author Tu Nombre
  */
 @Entity
 @Table(name = "gaming_houses")
@@ -19,11 +18,22 @@ public class GamingHouse {
 
     @Column(name = "capacidad_pcs")
     private int capacidad;
-
+    /*
+    * Una GH pertenece a un equipo solamente
+    * Con Lazy solo carga a su equipo cuando es necesario y así optimizamos rendimiento
+    * Siempre a de tener un equipo asociado
+    * Clave foranea que apunta al id del equipo
+    * unique = true ; solo un equipo puede tener esta gaming house
+    * no puede existir una GH sin equipo
+    * */
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "team_id", unique = true, nullable = false)
     private Equipo equipo;
-
+/*
+* El constructor vacío protected es obligatorio para Hibernate.
+    Hibernate lo usa para crear objetos desde la base de datos.
+    No debe ser público para evitar que el programador cree objetos incompletos.
+* */
     protected GamingHouse() {}
 
     public GamingHouse(String ciudad, int capacidad) {

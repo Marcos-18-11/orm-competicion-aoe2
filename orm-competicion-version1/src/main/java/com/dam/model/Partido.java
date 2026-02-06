@@ -13,6 +13,8 @@ public class Partido {
     @Column(nullable = false)
     private int jornada;
 
+     // Muchos partidos pueden tener el mismo equipo local
+     // Clave foránea   apunta al id del equipo local
     @ManyToOne
     @JoinColumn(name = "home_team_id")
     private Equipo local;
@@ -21,9 +23,9 @@ public class Partido {
     @JoinColumn(name = "away_team_id")
     private Equipo visitante;
 
-    private String resultado; // Ej: "3-1"
+    private String resultado;
 
-    @ManyToOne
+    @ManyToOne // Muchos partidos pueden tener el mismo ganador
     @JoinColumn(name = "winner_id")
     private Equipo ganador;
 

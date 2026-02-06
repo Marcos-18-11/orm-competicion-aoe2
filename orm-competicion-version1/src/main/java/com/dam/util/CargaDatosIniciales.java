@@ -7,7 +7,7 @@ import com.dam.model.Equipo;
 import com.dam.model.GamingHouse;
 import com.dam.model.Patrocinador;
 import com.github.javafaker.Faker;
-import org.hibernate.Session; // OJO: Import de Hibernate
+import org.hibernate.Session;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,7 +27,7 @@ public class CargaDatosIniciales {
             "Capoch", "Villese", "Yo", "ACCM", "Mr_Yo", "Sitaux", "Ganji"
     };
 
-    // CAMBIO: Ahora recibimos Session, no EntityManager
+    // Sesión
     public static void cargarDatos(Session session) {
         Faker faker = new Faker();
         Random random = new Random();
@@ -38,7 +38,7 @@ public class CargaDatosIniciales {
 
         System.out.println("--- INICIO CARGA DE DATOS (AoE2 Real Data - Hibernate Nativo) ---");
 
-        // 1. PATROCINADORES
+        //  PATROCINADORES
         List<Patrocinador> listaPatrocinadores = new ArrayList<>();
         String[] sponsorsReales = {"Red Bull", "Microsoft", "CaptureAge", "Twitch"};
 
@@ -53,7 +53,7 @@ public class CargaDatosIniciales {
             listaPatrocinadores.add(p);
         }
 
-        // 2. EQUIPOS
+        //  EQUIPOS
         int indexJugador = 0;
 
         for (String nombreClan : CLANES_REALES) {

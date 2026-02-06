@@ -4,42 +4,39 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity // <--- ¡ESTO ES LO QUE HIBERNATE NO ENCONTRABA!
-@Table(name = "teams")
+@Entity // Representa un atabla
+@Table(name = "teams") //Nombre de la tabla en la base de datos
 public class Equipo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id //Campo que funcionará como clave primaria
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //identificador autogenerado por la ddbb ;muy eficiente
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // no puede haber columna null
     private String nombre;
 
-    @Column(name = "pais_origen")
+    @Column(name = "pais_origen") //nombre de la columna
     private String pais;
 
     private int puntos;
 
-    // V2: Presupuesto
-    @Column(columnDefinition = "double default 1000000")
+
+    @Column(columnDefinition = "double default 1000000") // valor por defecto de column
     private double presupuesto;
 
-    // RELACIONES
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL) //Por que cada equipo tendrá su gaming house
     @JoinColumn(name = "gaming_house_id", referencedColumnName = "id")
     private GamingHouse gamingHouse;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // no eliminar al patrocinador a l eliminar a un equipo
+    @JoinTable( // Claves foraneas
             name = "team_sponsors",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "sponsor_id")
     )
     private List<Patrocinador> patrocinadores = new ArrayList<>();
 
-    // --- AQUÍ ESTABA EL CAMBIO ---
-    // Asegúrate de que está así (SIN orphanRemoval):
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL) //se guarda equipo y deportistas
     private List<Deportista> deportistas = new ArrayList<>();
 
     // CONSTRUCTORES
@@ -52,7 +49,7 @@ public class Equipo {
         this.presupuesto = 1000000;
     }
 
-    // MÉTODOS DE AYUDA (Helpers)
+    // (Helpers)
     public void asignarGamingHouse(GamingHouse gh) {
         this.gamingHouse = gh;
         if (gh != null) {
