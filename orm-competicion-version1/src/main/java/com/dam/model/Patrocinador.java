@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/***
- * Esta clase representa a los sponsors.
- * @author Tu Nombre
- */
 @Entity
 @Table(name = "sponsors")
 public class Patrocinador {
@@ -19,7 +15,6 @@ public class Patrocinador {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    // MappedBy indica que la tabla intermedia la gestiona 'Equipo'
     @ManyToMany(mappedBy = "patrocinadores", fetch = FetchType.LAZY)
     private Set<Equipo> equipos = new LinkedHashSet<>();
 

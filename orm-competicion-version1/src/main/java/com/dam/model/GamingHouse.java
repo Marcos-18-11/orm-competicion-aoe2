@@ -2,10 +2,7 @@ package com.dam.model;
 
 import jakarta.persistence.*;
 
-/***
- * Relación 1 a 1 con Equipo (Sede de entrenamiento).
- * @author Tu Nombre
- */
+
 @Entity
 @Table(name = "gaming_houses")
 public class GamingHouse {

@@ -16,9 +16,9 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 
 /***
- * Esta clase realiza las 14 consultas solicitadas en la práctica.
- * Se encarga de gestionar las queries JPQL, Nativas, NamedQueries y Criteria.
- * @author Tu Nombre
+ * Consultas a la DB
+ * Se encarga de gestionar las queries JPQL, NamedQueries ...
+ *
  */
 public class ConsultasCompeticion {
 
@@ -34,9 +34,6 @@ public class ConsultasCompeticion {
         this.patrocinadorDao = new PatrocinadorDaoJpa(em);
     }
 
-    // -------------------------------------------------------------------------
-    // 1. CARACTERÍSTICAS DE LA COMPETICIÓN (NATIVE QUERY)
-    // -------------------------------------------------------------------------
     public void consulta01_CaracteristicasCompeticion() {
         System.out.println("## 1. Características de la competición (Native Query)");
 
@@ -53,9 +50,7 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 1 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 2. RECUPERAR TODOS LOS EQUIPOS
-    // -------------------------------------------------------------------------
+
     public void consulta02_TodosLosEquipos() {
         System.out.println("## 2. Consulta y recupera todos los equipos participantes");
 
@@ -68,9 +63,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 2 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 3. LISTA DE DEPORTISTAS DE UN EQUIPO ESPECÍFICO
-    // -------------------------------------------------------------------------
     public void consulta03_DeportistasPorEquipo(String nombreEquipo) {
         System.out.println("## 3. Obtén la lista de deportistas de: " + nombreEquipo);
 
@@ -91,9 +83,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 3 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 4. PATROCINADORES ASOCIADOS A UN EQUIPO
-    // -------------------------------------------------------------------------
     public void consulta04_PatrocinadoresDeEquipo(String nombreEquipo) {
         System.out.println("## 4. Patrocinadores del equipo: " + nombreEquipo);
 
@@ -114,9 +103,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 4 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 5. LISTA DE DEPORTISTAS Y PATROCINADORES DE UN EQUIPO
-    // -------------------------------------------------------------------------
     public void consulta05_ResumenEquipo(String nombreEquipo) {
         System.out.println("## 5. Resumen completo (Jugadores + Sponsors) de: " + nombreEquipo);
 
@@ -141,9 +127,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 5 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 6. EDAD PROMEDIO DE DEPORTISTAS DE UN EQUIPO
-    // -------------------------------------------------------------------------
     public void consulta06_EdadPromedio(String nombreEquipo) {
         System.out.println("## 6. Edad promedio en el equipo: " + nombreEquipo);
 
@@ -162,9 +145,7 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 6 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 7. DEPORTISTAS > 23 AÑOS AGRUPADOS POR NACIONALIDAD
-    // -------------------------------------------------------------------------
+
     public void consulta07_Mayores23PorNacionalidad() {
         System.out.println("## 7. Deportistas > 23 años por Nacionalidad");
 
@@ -187,9 +168,7 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 7 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 8. CLASIFICACIÓN GENERAL (INICIO, MITAD, FINAL)
-    // -------------------------------------------------------------------------
+
     public void consulta08_ClasificacionGeneral() {
         System.out.println("## 8. Clasificación General (Ordenada por Puntos)");
 
@@ -205,9 +184,7 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 8 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 9. TOP 3 MEJORES Y PEORES EQUIPOS
-    // -------------------------------------------------------------------------
+
     public void consulta09_Top3_Bottom3() {
         System.out.println("## 9. Top 3 Mejores y Peores");
 
@@ -231,9 +208,7 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 9 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 10. NUEVAS INCORPORACIONES (NAMED QUERY)
-    // -------------------------------------------------------------------------
+
     public void consulta10_NuevasIncorporaciones() {
         System.out.println("## 10. Nuevas Incorporaciones (Usando NamedQuery: 'Deportista.buscarPorNacionalidad')");
 
@@ -254,9 +229,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 10 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 11. ENUMERAR FICHAJES REALIZADOS
-    // -------------------------------------------------------------------------
     public void consulta11_FichajesRealizados() {
         System.out.println("## 11. Historial de Fichajes");
         // En V1 no hay tabla de histórico. Mostramos el total de inscritos como "Fichajes Iniciales"
@@ -268,9 +240,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 11 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 12. RECUENTO TOTAL DE DEPORTISTAS
-    // -------------------------------------------------------------------------
     public void consulta12_TotalDeportistas() {
         System.out.println("## 12. Recuento total de participantes");
 
@@ -281,9 +250,6 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 12 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 13. PATROCINADORES COMUNES ENTRE DOS EQUIPOS
-    // -------------------------------------------------------------------------
     public void consulta13_PatrocinadoresComunes(String equipoA, String equipoB) {
         System.out.println("## 13. Sponsors comunes entre " + equipoA + " y " + equipoB);
 
@@ -308,31 +274,27 @@ public class ConsultasCompeticion {
         System.out.println("##################### FIN Consulta 13 #################################\n");
     }
 
-    // -------------------------------------------------------------------------
-    // 14. CRITERIA QUERY (FILTRADO DINÁMICO)
-    // -------------------------------------------------------------------------
     public void consulta14_BusquedaCriterios() {
         System.out.println("## 14. CriteriaQuery (API de Criterios - Sin SQL)");
 
-        // 1. Builder
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        // 2. Query type
+
         CriteriaQuery<Deportista> cq = cb.createQuery(Deportista.class);
-        // 3. Root (FROM)
+
         Root<Deportista> root = cq.from(Deportista.class);
 
-        // 4. Predicados (WHERE)
-        // Ejemplo: Jugadores de "Spain" o "Finland"
+
         Predicate esSpain = cb.equal(root.get("nacionalidad"), "Spain");
         Predicate esFinland = cb.equal(root.get("nacionalidad"), "Finland");
         Predicate spainOrFinland = cb.or(esSpain, esFinland);
 
-        // 5. Construcción
+
         cq.select(root)
                 .where(spainOrFinland)
                 .orderBy(cb.asc(root.get("nick")));
 
-        // 6. Ejecución
+
         List<Deportista> resultados = em.createQuery(cq).getResultList();
 
         System.out.println("## Resultado Criteria (Jugadores de Spain o Finland ordenados):");

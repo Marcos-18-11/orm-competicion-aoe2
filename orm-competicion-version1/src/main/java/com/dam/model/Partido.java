@@ -37,7 +37,6 @@ public class Partido {
         this.ganador = ganador;
     }
 
-    // Getters necesarios para consultas
     public Long getId() { return id; }
     public String getResultado() { return resultado; }
     public Equipo getGanador() { return ganador; }

@@ -13,6 +13,6 @@ public interface EquipoDao {
 
     void eliminar(Equipo equipo);
 
-    // Método extra útil para evitar duplicados por nombre
+
     Equipo buscarPorNombre(String nombre);
 }

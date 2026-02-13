@@ -4,8 +4,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 /***
- * Esta clase se encarga de gestionar la factoría de EntityManager
- * @author Tu Nombre
+ * Clase singleton dedicada a validar tablas, leer persistence...
+ * crea una variable estática que proporciona al resto del programa
  */
 public class JpaUtil {
 

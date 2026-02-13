@@ -6,12 +6,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/***
- * Esta clase representa a los clanes/equipos de AoE2.
- * @author Tu Nombre
- */
+
 @Entity
-@Table(name = "teams") // Tabla en inglés
+@Table(name = "teams")
 public class Equipo {
 
     @Id
@@ -19,7 +16,7 @@ public class Equipo {
     private Long id;
 
     @Column(columnDefinition = "int default 0")
-    private int puntos = 0; // Inicializamos a 0
+    private int puntos = 0;
 
     @Column(nullable = false, length = 60)
     private String nombre;
@@ -27,12 +24,11 @@ public class Equipo {
     @Column(name = "pais_origen", length = 60)
     private String pais;
 
-    // 1:N con Deportista (Un equipo tiene muchos jugadores)
-    // Cascade ALL: si borras equipo, borras jugadores (fichajes).
+
     @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Deportista> deportistas = new ArrayList<>();
 
-    // N:M con Patrocinador
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "team_sponsors",
@@ -41,7 +37,7 @@ public class Equipo {
     )
     private Set<Patrocinador> patrocinadores = new LinkedHashSet<>();
 
-    // 1:1 con GamingHouse (Opcional false: todo equipo necesita sede en esta simulación)
+
     @OneToOne(mappedBy = "equipo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private GamingHouse gamingHouse;
 
@@ -52,9 +48,9 @@ public class Equipo {
         this.pais = pais;
     }
 
-    // --- HELPERS (Estilo del profesor) ---
 
-    // Helper 1:N Jugadores
+
+
     public void addDeportista(Deportista deportista) {
         if (deportista == null) return;
         deportistas.add(deportista);
@@ -67,7 +63,7 @@ public class Equipo {
         deportista.setEquipo(null);
     }
 
-    // Helper N:M Patrocinadores
+
     public void addPatrocinador(Patrocinador patrocinador) {
         if (patrocinador == null) return;
         patrocinadores.add(patrocinador);

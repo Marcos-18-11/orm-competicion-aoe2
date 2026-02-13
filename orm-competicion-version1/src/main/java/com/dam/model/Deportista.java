@@ -3,11 +3,6 @@ package com.dam.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
-/***
- * Esta clase representa a los jugadores profesionales.
- * @author Marcos
- * @version 1.0
- */
 @Entity
 @Table(name = "players")
 @NamedQuery(

@@ -17,7 +17,6 @@ import java.util.Random;
 
 public class CargaDatosIniciales {
 
-    // DATOS REALES DE AOE2 PARA DARLE REALISMO
     private static final String[] CLANES_REALES = {
             "GamerLegion", "Aftermath", "Team Suomi", "White Wolf Palace",
             "Heresy", "Amigos", "Barles & Cia", "Suicide Squad"
@@ -37,7 +36,7 @@ public class CargaDatosIniciales {
 
         System.out.println("--- INICIO CARGA DE DATOS (AoE2 Real Data) ---");
 
-        // 1. PATROCINADORES (Mezclamos reales con generados)
+
         List<Patrocinador> listaPatrocinadores = new ArrayList<>();
         String[] sponsorsReales = {"Red Bull", "Microsoft", "CaptureAge", "Twitch"};
 
@@ -46,35 +45,33 @@ public class CargaDatosIniciales {
             patrocinadorDao.guardar(p);
             listaPatrocinadores.add(p);
         }
-        // Rellenamos hasta 10 con Faker
+
         for (int i = 0; i < 6; i++) {
             Patrocinador p = new Patrocinador(faker.company().name());
             patrocinadorDao.guardar(p);
             listaPatrocinadores.add(p);
         }
 
-        // 2. EQUIPOS
+
         int indexJugador = 0;
 
         for (String nombreClan : CLANES_REALES) {
             Equipo equipo = new Equipo(nombreClan, faker.country().name());
 
-            // A. Gaming House
+
             GamingHouse gh = new GamingHouse(faker.address().city(), random.nextInt(10) + 5);
             equipo.asignarGamingHouse(gh);
 
-            // B. Patrocinadores (2 aleatorios)
+
             equipo.addPatrocinador(listaPatrocinadores.get(random.nextInt(listaPatrocinadores.size())));
             equipo.addPatrocinador(listaPatrocinadores.get(random.nextInt(listaPatrocinadores.size())));
 
-            // C. Jugadores (Intentamos poner 1 PRO real y el resto randoms)
-            // Ponemos un jugador famoso
+
             if (indexJugador < JUGADORES_PRO.length) {
                 String nombrePro = JUGADORES_PRO[indexJugador++];
                 crearJugador(equipo, nombrePro, faker);
             }
 
-            // Rellenamos el resto del equipo hasta tener 4 jugadores
             for (int j = 0; j < 3; j++) {
                 crearJugador(equipo, faker.esports().player(), faker);
             }

@@ -36,7 +36,7 @@ public class DeportistaDaoJpa implements DeportistaDao {
 
     @Override
     public List<Deportista> buscarPorEquipo(Long idEquipo) {
-        // JPQL: Buscar deportistas donde el equipo.id sea igual al parámetro
+
         TypedQuery<Deportista> query = entityManager.createQuery(
                 "SELECT d FROM Deportista d WHERE d.equipo.id = :idEquipo", Deportista.class);
         query.setParameter("idEquipo", idEquipo);

@@ -18,7 +18,7 @@ public class EquipoDaoJpa implements EquipoDao {
 
     @Override
     public void guardar(Equipo equipo) {
-        // Si el id es nulo es nuevo (persist), si no, es actualización (merge)
+
         if (equipo.getId() == null) {
             entityManager.persist(equipo);
         } else {
@@ -33,7 +33,7 @@ public class EquipoDaoJpa implements EquipoDao {
 
     @Override
     public List<Equipo> buscarTodos() {
-        // JPQL: Selecciona e de la clase Equipo
+
         return entityManager.createQuery("SELECT e FROM Equipo e", Equipo.class)
                 .getResultList();
     }
